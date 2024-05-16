@@ -68,7 +68,7 @@
 
     public async Task<bool> ShowAsync()
     {
-        var module = await JS.InvokeAsync<IJSObjectReference>("import", "_content/nich2408.Blazor.SimpleModal/modals.js");
+        var module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/nich2408.Blazor.SimpleModal/modals.js");
         await module.InvokeVoidAsync("displayModal", $"#{Id}");
 
         userInteracted = false;
