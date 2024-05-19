@@ -37,7 +37,7 @@
     public IJSRuntime? JS { get; set; }
 
     [Parameter]
-    public string? Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString("D");
 
     [Parameter]
     public string? Title { get; set; }
@@ -123,6 +123,10 @@
 
     protected override void OnParametersSet()
     {
+        if (string.IsNullOrWhiteSpace(Id))
+        {
+            throw new InvalidOperationException("Id is required.");
+        };
         if (Content is null)
         {
             throw new InvalidOperationException("Content is required.");
