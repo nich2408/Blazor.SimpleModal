@@ -39,9 +39,7 @@ Example.razor
   EnableDismissButton="true"
   DismissOnOutsideClick="true"
   DismissOnEscapeKey="true">
-  <Content>
     Place here the content!
-  </Content>
 </SimpleModal>
 
 @code {
