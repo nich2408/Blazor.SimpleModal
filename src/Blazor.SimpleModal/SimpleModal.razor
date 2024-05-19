@@ -11,7 +11,7 @@
                 </div>
             }
             <div id="@($"{Id}ModalContent")" class="modal-body">
-                @Content
+                @ChildContent
             </div>
             @if (EnableFooter)
             {
@@ -68,7 +68,7 @@
     public string ConfirmButtonClass { get; set; } = "btn btn-primary";
 
     [Parameter]
-    public RenderFragment? Content { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
     private static bool jsModuleImported = false;
 
@@ -131,7 +131,7 @@
         {
             throw new InvalidOperationException("Id is required.");
         };
-        if (Content is null)
+        if (ChildContent is null)
         {
             throw new InvalidOperationException("Content is required.");
         };
