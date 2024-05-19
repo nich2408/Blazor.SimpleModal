@@ -7,7 +7,7 @@
             {
                 <div class="modal-header">
                     <h5 class="modal-title" id="@($"{Id}ModalLabel")">@Title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="@Cancel" @onclick:stopPropagation="true">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="@StartDismiss" @onclick:stopPropagation="true">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -20,11 +20,11 @@
                 <div class="modal-footer">
                     @if (EnableDismissButton)
                     {
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="@Cancel" @onclick:stopPropagation="true">@DismissText</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="@StartDismiss" @onclick:stopPropagation="true">@DismissText</button>
                     }
                     @if (EnableConfirmButton)
                     {
-                        <button type="button" class="@ConfirmButtonClass" data-dismiss="modal" @onclick="@Confirm" @onclick:stopPropagation="true">@ConfirmtText</button>
+                        <button type="button" class="@ConfirmButtonClass" data-dismiss="modal" @onclick="@StartConfirmation" @onclick:stopPropagation="true">@ConfirmtText</button>
                     }
                 </div>
             }
@@ -80,11 +80,9 @@
         {
             throw new InvalidOperationException("Module is not initialized.");
         };
-
         await module.InvokeVoidAsync("displayModal", $"#{Id}");
 
         userInteracted = false;
-
         await WaitUserConfirmation();
 
         return userHasConfirmed;
@@ -112,6 +110,14 @@
         modalEventsJsHelper.OnModalClosed += ModalEventsJsHelper_OnModalClosed;
     }
 
+    protected override void OnParametersSet()
+    {
+        if (Content is null)
+        {
+            throw new InvalidOperationException("Content is required.");
+        };
+    }
+
     private async Task WaitUserConfirmation()
     {
         while (!userInteracted)
@@ -120,15 +126,14 @@
         }
     }
 
-    private void Confirm()
+    private void StartConfirmation()
     {
-        // userInteracted = true;
         userHasConfirmed = true;
     }
 
-    private void Cancel()
+    private void StartDismiss()
     {
-        // userInteracted = true;
+        userHasConfirmed = false;
     }
 
     private void ModalEventsJsHelper_OnModalClosed(object? sender, EventArgs eventArgs)
