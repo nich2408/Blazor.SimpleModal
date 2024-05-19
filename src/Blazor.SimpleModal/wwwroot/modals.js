@@ -1,11 +1,13 @@
 ﻿export function displayModal(id) {
-    // https://getbootstrap.com/docs/4.0/components/modal/#events
-    $(id).modal('show');
+    let modalElement = document.getElementById(id);
+    let modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+    modalInstance.show();
 }
 
 export function initializeModalEvents(id, modalEventsJsHelperRef) {
-    // https://getbootstrap.com/docs/4.0/components/modal/#events
-    $(id).on('hidden.bs.modal', function (e) {
+    // https://getbootstrap.com/docs/5.1/components/modal/#events
+    let modalElement = document.getElementById(id);
+    modalElement.addEventListener('hidden.bs.modal', function (e) {
         console.log(e);
         // Invokes the method stored in dotnet runtime.
         modalEventsJsHelperRef.invokeMethodAsync('ModalClosedAsync')
