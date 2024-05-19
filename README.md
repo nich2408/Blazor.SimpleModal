@@ -77,3 +77,6 @@ If you want to leave feedback (bugs or discussion) you can open an issue.
 
 ## Contributing
 Currently the project is not planned to be opened to contribution inside this repository.
+
+## Credits
+- Bootstrap modals: https://getbootstrap.com/docs/5.3/components/modal/
