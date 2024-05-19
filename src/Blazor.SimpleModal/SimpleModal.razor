@@ -31,55 +31,99 @@
 </div>
 
 @code {
+    /// <summary>
+    /// JavaScript runtime interop.
+    /// Don't override this property, it's automatically injected by Blazor.
+    /// </summary>
     [Inject]
     public IJSRuntime? JS { get; set; }
 
+    /// <summary>
+    /// The modal identifier, default value is a GUID. If set manually, the value must be unique and browser DOM compliant.
+    /// </summary>
     [Parameter]
     public string Id { get; set; } = $"m{Guid.NewGuid().ToString("N")}";
 
+    /// <summary>
+    /// The title displayed in the header of the modal.
+    /// </summary>
     [Parameter]
     public string? Title { get; set; }
 
+    /// <summary>
+    /// The text displayed in the confirm button.
+    /// </summary>
     [Parameter]
     public string ConfirmtText { get; set; } = "Confirm";
 
+    /// <summary>
+    /// The text displayed in the dismiss button.
+    /// </summary>
     [Parameter]
     public string DismissText { get; set; } = "Close";
 
+    /// <summary>
+    /// If set to <c>true</c>, the confirm button will be displayed in the footer of the modal.
+    /// </summary>
     [Parameter]
     public bool EnableConfirmButton { get; set; }
 
+    /// <summary>
+    /// If set to <c>true</c>, the dismiss button will be displayed in the footer of the modal.
+    /// </summary>
     [Parameter]
     public bool EnableDismissButton { get; set; }
 
+    /// <summary>
+    /// If set to <c>true</c>, the header of the modal will be displayed.
+    /// </summary>
     [Parameter]
     public bool EnableHeader { get; set; } = true;
 
+    /// <summary>
+    /// If set to <c>true</c>, the footer of the modal will be displayed.
+    /// </summary>
     [Parameter]
     public bool EnableFooter { get; set; } = true;
 
+    /// <summary>
+    /// If set to <c>true</c>, the modal will be dismissed when the user clicks outside the modal.
+    /// </summary>
     [Parameter]
     public bool DismissOnOutsideClick { get; set; }
 
+    /// <summary>
+    /// If set to <c>true</c>, the modal will be dismissed when the user presses the escape key.
+    /// </summary>
     [Parameter]
     public bool DismissOnEscapeKey { get; set; }
 
+    /// <summary>
+    /// The CSS class applied to the confirm button, default value is "<c>btn btn-primary</c>".
+    /// </summary>
     [Parameter]
     public string ConfirmButtonClass { get; set; } = "btn btn-primary";
 
+    /// <summary>
+    /// The content of the modal, must be set.
+    /// </summary>
     [Parameter]
     public RenderFragment? Content { get; set; }
 
     private static bool jsModuleImported = false;
+    private IJSObjectReference? module;
 
     private ModalEventsJsHelper modalEventsJsHelper = new();
     private DotNetObjectReference<ModalEventsJsHelper>? modalEventsJsHelperRef;
 
-    private IJSObjectReference? module;
-
     private bool userInteracted;
     private bool userHasConfirmed;
 
+    /// <summary>
+    /// Shows the modal and waits for the user to interact with it.
+    /// </summary>
+    /// <returns><c>true</c> if the user confirmed, otherwise <c>false</c>.</returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public async Task<bool> ShowAsync()
     {
         if (module == null)
@@ -95,12 +139,14 @@
         return userHasConfirmed;
     }
 
+    // <inheritdoc />
     public void Dispose()
     {
         modalEventsJsHelper.OnModalClosed -= ModalEventsJsHelper_OnModalClosed;
         modalEventsJsHelperRef?.Dispose();
     }
 
+    // <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
         modalEventsJsHelper.OnModalClosed += ModalEventsJsHelper_OnModalClosed;
@@ -125,6 +171,7 @@
         await module.InvokeVoidAsync("initializeModalEvents", Id, modalEventsJsHelperRef);
     }
 
+    // <inheritdoc />
     protected override void OnParametersSet()
     {
         if (string.IsNullOrWhiteSpace(Id))
