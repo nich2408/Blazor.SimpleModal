@@ -1,4 +1,4 @@
-﻿@inject IJSRuntime JS
+﻿@implements IDisposable
 
 <div class="modal fade" id="@Id" tabindex="-1" role="dialog" aria-labelledby="@($"{Id}ModalLabel")" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog" role="document">
@@ -33,6 +33,9 @@
 </div>
 
 @code {
+    [Inject]
+    public IJSRuntime? JS { get; set; }
+
     [Parameter]
     public string? Id { get; set; }
 
@@ -63,12 +66,21 @@
     [Parameter]
     public RenderFragment? Content { get; set; }
 
+    private ModalEventsJsHelper modalEventsJsHelper = new();
+    private DotNetObjectReference<ModalEventsJsHelper>? modalEventsJsHelperRef;
+
+    private IJSObjectReference? module;
+
     private bool userInteracted;
     private bool userHasConfirmed;
 
     public async Task<bool> ShowAsync()
     {
-        var module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/nich2408.Blazor.SimpleModal/modals.js");
+        if (module == null)
+        {
+            throw new InvalidOperationException("Module is not initialized.");
+        };
+
         await module.InvokeVoidAsync("displayModal", $"#{Id}");
 
         userInteracted = false;
@@ -76,6 +88,28 @@
         await WaitUserConfirmation();
 
         return userHasConfirmed;
+    }
+
+    public void Dispose()
+    {
+        modalEventsJsHelper.OnModalClosed -= ModalEventsJsHelper_OnModalClosed;
+        modalEventsJsHelperRef?.Dispose();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (JS == null)
+        {
+            throw new InvalidOperationException("JSRuntime is not initialized.");
+        };
+        module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/nich2408.Blazor.SimpleModal/modals.js");
+
+        // Initializes the helper reference needed to make Javascript interop with dotnet.
+        // More info: https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/call-dotnet-from-javascript?view=aspnetcore-8.0#pass-a-dotnetobjectreference-to-a-class-with-multiple-javascript-functions
+        modalEventsJsHelperRef = DotNetObjectReference.Create(modalEventsJsHelper);
+        await module.InvokeVoidAsync("initializeModalEventsJsHelper", modalEventsJsHelperRef);
+
+        modalEventsJsHelper.OnModalClosed += ModalEventsJsHelper_OnModalClosed;
     }
 
     private async Task WaitUserConfirmation()
@@ -88,11 +122,16 @@
 
     private void Confirm()
     {
-        userInteracted = true;
+        // userInteracted = true;
         userHasConfirmed = true;
     }
 
     private void Cancel()
+    {
+        // userInteracted = true;
+    }
+
+    private void ModalEventsJsHelper_OnModalClosed(object? sender, EventArgs eventArgs)
     {
         userInteracted = true;
     }
