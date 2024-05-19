@@ -1,6 +1,6 @@
 ﻿@implements IDisposable
 
-<div class="modal fade" id="@Id" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="@($"{Id}ModalLabel")" aria-describedby="@($"{Id}ModalContent")" data-bs-keyboard="false" data-bs-backdrop=@(CloseOnOutsideClick ? "true" : "static")>
+<div class="modal fade" id="@Id" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="@($"{Id}ModalLabel")" aria-describedby="@($"{Id}ModalContent")" data-bs-keyboard=@(DismissOnEscapeKey ? "true" : "false") data-bs-backdrop=@(DismissOnOutsideClick ? "true" : "static")>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             @if (EnableHeader)
@@ -59,7 +59,10 @@
     public bool EnableFooter { get; set; } = true;
 
     [Parameter]
-    public bool CloseOnOutsideClick { get; set; }
+    public bool DismissOnOutsideClick { get; set; }
+
+    [Parameter]
+    public bool DismissOnEscapeKey { get; set; }
 
     [Parameter]
     public string ConfirmButtonClass { get; set; } = "btn btn-primary";
