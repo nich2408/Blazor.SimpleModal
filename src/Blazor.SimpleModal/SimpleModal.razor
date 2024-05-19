@@ -7,7 +7,7 @@
             {
                 <div class="modal-header">
                     <h5 class="modal-title" id="@($"{Id}ModalLabel")">@Title</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" @onclick="@StartDismiss" @onclick:stopPropagation="true">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="@StartDismiss" @onclick:stopPropagation="true">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -83,7 +83,7 @@
             throw new InvalidOperationException("Module is not initialized.");
         };
 
-        await module.InvokeVoidAsync("displayModal", $"#{Id}");
+        await module.InvokeVoidAsync("displayModal", Id);
 
         userInteracted = false;
         await WaitUserConfirmation();
