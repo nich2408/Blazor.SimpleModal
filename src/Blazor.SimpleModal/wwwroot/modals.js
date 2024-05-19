@@ -1,6 +1,9 @@
-﻿export let modalEventsJsHelperRef;
+﻿export function displayModal(id) {
+    // https://getbootstrap.com/docs/4.0/components/modal/#events
+    $(id).modal('show');
+}
 
-export function displayModal(id) {
+export function initializeModalEvents(id, modalEventsJsHelperRef) {
     // https://getbootstrap.com/docs/4.0/components/modal/#events
     $(id).on('hidden.bs.modal', function (e) {
         console.log(e);
@@ -9,12 +12,5 @@ export function displayModal(id) {
             .then(() => {
                 console.log("[interop] Invoked ModalClosedAsync");
             });
-    })
-    // https://getbootstrap.com/docs/4.0/components/modal/#events
-    $(id).modal('show');
-}
-
-// Initializes the helper reference required to interop with dotnet.
-export function initializeModalEventsJsHelper(helperRef) {
-    modalEventsJsHelperRef = helperRef;
+    });
 }

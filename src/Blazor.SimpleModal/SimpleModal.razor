@@ -66,6 +66,8 @@
     [Parameter]
     public RenderFragment? Content { get; set; }
 
+    private static bool jsModuleImported = false;
+
     private ModalEventsJsHelper modalEventsJsHelper = new();
     private DotNetObjectReference<ModalEventsJsHelper>? modalEventsJsHelperRef;
 
@@ -80,6 +82,7 @@
         {
             throw new InvalidOperationException("Module is not initialized.");
         };
+
         await module.InvokeVoidAsync("displayModal", $"#{Id}");
 
         userInteracted = false;
@@ -96,18 +99,26 @@
 
     protected override async Task OnInitializedAsync()
     {
+        modalEventsJsHelper.OnModalClosed += ModalEventsJsHelper_OnModalClosed;
         if (JS == null)
         {
             throw new InvalidOperationException("JSRuntime is not initialized.");
         };
-        module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/nich2408.Blazor.SimpleModal/modals.js");
+
+        // Imports the module only once because the module will be used across all modals component instances.
+        if (!jsModuleImported)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/nich2408.Blazor.SimpleModal/modals.js");
+        };
+        if (module is null)
+        {
+            throw new InvalidOperationException("Module is not initialized.");
+        };
 
         // Initializes the helper reference needed to make Javascript interop with dotnet.
         // More info: https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/call-dotnet-from-javascript?view=aspnetcore-8.0#pass-a-dotnetobjectreference-to-a-class-with-multiple-javascript-functions
         modalEventsJsHelperRef = DotNetObjectReference.Create(modalEventsJsHelper);
-        await module.InvokeVoidAsync("initializeModalEventsJsHelper", modalEventsJsHelperRef);
-
-        modalEventsJsHelper.OnModalClosed += ModalEventsJsHelper_OnModalClosed;
+        await module.InvokeVoidAsync("initializeModalEvents", $"#{Id}", modalEventsJsHelperRef);
     }
 
     protected override void OnParametersSet()
