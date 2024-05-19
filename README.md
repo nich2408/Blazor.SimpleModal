@@ -1,3 +1,5 @@
+![image](https://github.com/nich2408/Blazor.SimpleModal/assets/98348348/4172379e-ae98-4fba-8591-d9247ebdfbf9)
+
 # Blazor.SimpleModal
 
 Blazor class library for modal display and interaction with simplicity in mind.
@@ -30,8 +32,6 @@ Example.razor
 ```razor
 @using Blazor.SimpleModal
 
-[...]
-
 <SimpleModal
   @ref="mySimpleModal"
   Title="This is the title"
@@ -43,6 +43,25 @@ Example.razor
     Place here the content!
   </Content>
 </SimpleModal>
+
+@code {
+  // Use this field for holding a reference to the modal.
+  private SimpleModal mySimpleModal;
+
+  // code omitted for brevity
+  [...]
+}
+```
+
+### Displaying the modal
+```csharp
+bool confirmed = await mySimpleModal.ShowAsync();
+```
+
+or
+
+```csharp
+await mySimpleModal.ShowAsync();
 ```
 
 Screenshot:
