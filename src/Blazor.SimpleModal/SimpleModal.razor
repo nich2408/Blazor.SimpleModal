@@ -35,7 +35,7 @@
     public IJSRuntime? JS { get; set; }
 
     [Parameter]
-    public string Id { get; set; } = Guid.NewGuid().ToString("N");
+    public string Id { get; set; } = $"m{Guid.NewGuid().ToString("N")}";
 
     [Parameter]
     public string? Title { get; set; }
