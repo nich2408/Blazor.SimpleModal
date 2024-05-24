@@ -7,11 +7,32 @@
     <PackageId>nich2408.$(AssemblyName)</PackageId>
     <Title>Blazor.SimpleModal</Title>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Authors>Nicolò Baccin</Authors>
+    <Description>Blazor library for modal display and interaction with simplicity in mind.</Description>
+    <Copyright>Copyright (c) 2024 Nicolò Baccin</Copyright>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nich2408/Blazor.SimpleModal</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>blazor;modal</PackageTags>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageIcon>icon.png</PackageIcon>
+	<IncludeSymbols>True</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
-
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<None Include="icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<None Include="..\..\README.md">
+  	  <Pack>True</Pack>
+  	  <PackagePath>\</PackagePath>
+  	</None>
   </ItemGroup>
 
   <ItemGroup>
