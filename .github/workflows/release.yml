@@ -42,6 +42,6 @@ jobs:
         retention-days: 15
     - name: Push generated package to NuGet feed
       run: |
-        dotnet nuget push ./output/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate -n 
+        dotnet nuget push ./output/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key $NUGET_AUTH_TOKEN
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.NUGET_ORG_API_KEY }} 
