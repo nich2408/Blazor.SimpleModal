@@ -26,11 +26,11 @@ jobs:
         export VERSION=${{ github.event.release.tag_name }}
         echo PACKAGE_VERSION=${VERSION#v*} >> $GITHUB_ENV
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${GITHUB_WORKSPACE}/src/Blazor.SimpleModal.csproj
     - name: Build
       run: |
         echo "Build version: ${{ env.PACKAGE_VERSION }}"
-        dotnet build --configuration Release --no-restore
+        dotnet build ${GITHUB_WORKSPACE}/src/Blazor.SimpleModal.csproj --configuration Release --no-restore
     - name: Generate NuGet package
       run: dotnet pack ${GITHUB_WORKSPACE}/src/Blazor.SimpleModal.csproj --include-symbols -p:SymbolPackageFormat=snupkg -c Release -o output -p:PackageVersion=${{ env.PACKAGE_VERSION }}
     - name: Upload package as artifact
