@@ -7,6 +7,9 @@ namespace Blazor.SimpleModal
     /// </summary>
     public class ModalEventsJsHelper
     {
+        /// <summary>
+        /// Event that will be triggered when the modal is closed.
+        /// </summary>
         public event EventHandler? OnModalClosed;
 
         /// <summary>
