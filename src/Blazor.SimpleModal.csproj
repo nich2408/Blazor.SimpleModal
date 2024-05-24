@@ -9,6 +9,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Authors>Nicolò Baccin</Authors>
     <Description>Blazor library for modal display and interaction with simplicity in mind.</Description>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright (c) 2024 Nicolò Baccin</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/nich2408/Blazor.SimpleModal</RepositoryUrl>
